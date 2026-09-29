@@ -25,9 +25,18 @@ public class WebDriverFactory {
 			EdgeOptions options = new EdgeOptions();
 
 			if (System.getenv("JENKINS_HOME") != null) {
-				options.addArguments("--headless=new");
-				options.addArguments("--disable-gpu");
-				options.addArguments("--window-size=1920,1080");
+				if (System.getenv("JENKINS_HOME") != null) {
+					options.addArguments("--headless=new");
+					options.addArguments("--disable-gpu");
+					options.addArguments("--window-size=1920,1080");
+					options.addArguments("--no-first-run");
+					options.addArguments("--no-default-browser-check");
+
+					String userDataDir = System.getProperty("java.io.tmpdir") + "selenium-edge-"
+							+ java.util.UUID.randomUUID();
+
+					options.addArguments("--user-data-dir=" + userDataDir);
+				}
 			}
 
 			return new EdgeDriver(options);
