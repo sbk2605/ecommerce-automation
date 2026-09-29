@@ -4,6 +4,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.edge.EdgeOptions;
 
 public class WebDriverFactory {
 
@@ -20,9 +21,20 @@ public class WebDriverFactory {
 			return new FirefoxDriver();
 
 		} else if (browser.equalsIgnoreCase("edge")) {
-			return new EdgeDriver();
 
-		} else {
+			EdgeOptions options = new EdgeOptions();
+
+			if (System.getenv("JENKINS_HOME") != null) {
+				options.addArguments("--headless=new");
+				options.addArguments("--disable-gpu");
+				options.addArguments("--window-size=1920,1080");
+			}
+
+			return new EdgeDriver(options);
+
+		}
+
+		else {
 			throw new FrameworkException("Unsupported browser: " + browser);
 		}
 	}
